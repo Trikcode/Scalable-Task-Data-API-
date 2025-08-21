@@ -1,32 +1,31 @@
-# Pipeline Configuration
-workers: 5
-batch_size: 100
-log_level: "info"
+# Server Configuration
+server:
+  host: "0.0.0.0"
+  port: 8080
+  read_timeout: "10s"
+  write_timeout: "10s"
+  idle_timeout: "60s"
 
-# Kafka Configuration
-kafka:
-  brokers:
-    - "localhost:9092"
-  consumer_group: "data-pipeline-group"
-  security_protocol: "PLAINTEXT"
-  # Uncomment and configure for SASL authentication
-  # sasl_mechanism: "PLAIN"
-  # sasl_username: "${KAFKA_SASL_USERNAME}"
-  # sasl_password: "${KAFKA_SASL_PASSWORD}"
+# Database Configuration (TimescaleDB/PostgreSQL)
+database:
+  host: "localhost"
+  port: 5432
+  user: "postgres"
+  password: "postgres"
+  name: "taskdb"
+  ssl_mode: "disable"
+  max_open_conns: 25
+  max_idle_conns: 5
+  conn_max_lifetime: "5m"
 
-# AWS S3 Configuration
-s3:
-  region: "us-east-1"
-  bucket: "data-pipeline-bucket"
-  # Credentials will be read from environment variables:
-  # AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
-  # Or from IAM roles when running in AWS
-  
-  # For custom endpoints (like MinIO):
-  # endpoint: "http://localhost:9000"
+# JWT Configuration
+jwt:
+  secret_key: "your-secret-key-change-this-in-production"
+  token_expiration: "24h"
+  refresh_expiration: "168h" # 7 days
 
-# Processing Configuration
-processing:
-  timeout: "30s"
-  max_retries: 3
-  retry_delay: "1s"
+# Metrics Configuration
+metrics:
+  enabled: true
+  path: "/metrics"
+  port: 8081

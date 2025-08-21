@@ -15,42 +15,39 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Go CLI Pipeline Tool"
+args = "API Demo"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "go_cli_test"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Pipeline Demo"
+args = "Task API Demo"
 
 [[workflows.workflow]]
-name = "Go CLI Pipeline Tool"
+name = "API Demo"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "go mod tidy && go run main.go --help"
+args = "./demo-api.sh"
 
 [workflows.workflow.metadata]
 outputType = "console"
 
 [[workflows.workflow]]
-name = "go_cli_test"
+name = "Task API Demo"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "go mod tidy && go run main.go --help"
-
-[[workflows.workflow]]
-name = "Pipeline Demo"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "./demo.sh"
+args = "./task-api-demo"
+waitForPort = 5000
 
 [workflows.workflow.metadata]
-outputType = "console"
+outputType = "webview"
+
+[[ports]]
+localPort = 5000
+externalPort = 5000
+
+[[ports]]
+localPort = 8080
+externalPort = 80
