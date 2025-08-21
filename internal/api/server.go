@@ -29,13 +29,10 @@ type Server struct {
 	metrics    *monitoring.Metrics
 }
 
-// NewServer creates a new server instance
 func NewServer(cfg *config.Config, db *sql.DB) *Server {
-	// Initialize services
 	jwtService := auth.NewJWTService(&cfg.JWT)
 	metrics := monitoring.NewMetrics()
 
-	// Initialize handlers
 	authHandler := handlers.NewAuthHandler(db, jwtService)
 	taskHandler := handlers.NewTaskHandler(db, metrics)
 
@@ -95,14 +92,11 @@ func NewServer(cfg *config.Config, db *sql.DB) *Server {
 	}
 }
 
-// Start starts the HTTP server
 func (s *Server) Start() error {
-	// Start metrics server if enabled
 	if s.config.Metrics.Enabled {
 		go s.startMetricsServer()
 	}
 
-	// Create HTTP server
 	server := &http.Server{
 		Addr:         fmt.Sprintf("%s:%d", s.config.Server.Host, s.config.Server.Port),
 		Handler:      s.router,
@@ -111,7 +105,6 @@ func (s *Server) Start() error {
 		IdleTimeout:  s.config.Server.IdleTimeout,
 	}
 
-	// Start server in a goroutine
 	go func() {
 		log.Printf("Starting server on %s:%d", s.config.Server.Host, s.config.Server.Port)
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -119,14 +112,12 @@ func (s *Server) Start() error {
 		}
 	}()
 
-	// Wait for interrupt signal to gracefully shutdown the server
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 
 	log.Println("Shutting down server...")
 
-	// Give outstanding requests 5 seconds to complete
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 

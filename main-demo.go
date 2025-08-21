@@ -13,13 +13,11 @@ import (
 )
 
 func main() {
-	// Check if demo mode
 	if len(os.Args) > 1 && os.Args[1] == "demo" {
 		runDemoMode()
 		return
 	}
 
-	// Regular mode - requires database
 	cfg, err := config.Load()
 	if err != nil {
 		log.Fatalf("Failed to load configuration: %v", err)
@@ -35,7 +33,6 @@ func main() {
 	defer db.Close()
 
 	log.Println("Starting with real database...")
-	// Continue with normal startup
 }
 
 func runDemoMode() {

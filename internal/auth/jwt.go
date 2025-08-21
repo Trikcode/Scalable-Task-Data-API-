@@ -9,7 +9,6 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-// Claims represents the JWT claims
 type Claims struct {
 	UserID   int    `json:"user_id"`
 	Username string `json:"username"`
@@ -17,7 +16,6 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-// JWTService handles JWT operations
 type JWTService struct {
 	config *config.JWTConfig
 }
@@ -48,7 +46,6 @@ func (j *JWTService) GenerateToken(userID int, username, role string) (string, e
 	return token.SignedString([]byte(j.config.SecretKey))
 }
 
-// GenerateRefreshToken generates a new refresh token
 func (j *JWTService) GenerateRefreshToken(userID int, username, role string) (string, error) {
 	claims := &Claims{
 		UserID:   userID,
@@ -67,10 +64,8 @@ func (j *JWTService) GenerateRefreshToken(userID int, username, role string) (st
 	return token.SignedString([]byte(j.config.SecretKey))
 }
 
-// ValidateToken validates a JWT token and returns the claims
 func (j *JWTService) ValidateToken(tokenString string) (*Claims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-		// Validate the signing method
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
@@ -100,13 +95,11 @@ type TokenResponse struct {
 	ExpiresIn    int64  `json:"expires_in"`
 }
 
-// LoginRequest represents the login request payload
 type LoginRequest struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
-// RefreshTokenRequest represents the refresh token request payload
 type RefreshTokenRequest struct {
 	RefreshToken string `json:"refresh_token" binding:"required"`
 }
