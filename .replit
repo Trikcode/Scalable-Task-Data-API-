@@ -1,2 +1,56 @@
+modules = ["go", "go-1.19"]
 [agent]
 expertMode = true
+
+[nix]
+channel = "stable-25_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Go CLI Pipeline Tool"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "go_cli_test"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Pipeline Demo"
+
+[[workflows.workflow]]
+name = "Go CLI Pipeline Tool"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "go mod tidy && go run main.go --help"
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[[workflows.workflow]]
+name = "go_cli_test"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "go mod tidy && go run main.go --help"
+
+[[workflows.workflow]]
+name = "Pipeline Demo"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "./demo.sh"
+
+[workflows.workflow.metadata]
+outputType = "console"

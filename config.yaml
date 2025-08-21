@@ -1,0 +1,32 @@
+# Pipeline Configuration
+workers: 5
+batch_size: 100
+log_level: "info"
+
+# Kafka Configuration
+kafka:
+  brokers:
+    - "localhost:9092"
+  consumer_group: "data-pipeline-group"
+  security_protocol: "PLAINTEXT"
+  # Uncomment and configure for SASL authentication
+  # sasl_mechanism: "PLAIN"
+  # sasl_username: "${KAFKA_SASL_USERNAME}"
+  # sasl_password: "${KAFKA_SASL_PASSWORD}"
+
+# AWS S3 Configuration
+s3:
+  region: "us-east-1"
+  bucket: "data-pipeline-bucket"
+  # Credentials will be read from environment variables:
+  # AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
+  # Or from IAM roles when running in AWS
+  
+  # For custom endpoints (like MinIO):
+  # endpoint: "http://localhost:9000"
+
+# Processing Configuration
+processing:
+  timeout: "30s"
+  max_retries: 3
+  retry_delay: "1s"
